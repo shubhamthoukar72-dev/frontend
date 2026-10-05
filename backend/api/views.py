@@ -14,6 +14,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -21,6 +22,7 @@ from .ai import (
     AIServiceError,
     analyze_job_match,
     analyze_resume,
+    chat_with_ai,
     extract_resume_text,
     recommend_jobs,
 )
@@ -356,6 +358,55 @@ class AIView(APIView):
         if action != "resume/analyze":
             return Response({"detail": "Unknown AI endpoint."}, status=404)
         return self.get(request, action)
+
+
+class ChatView(APIView):
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "ai_chat"
+
+    def post(self, request):
+        messages = request.data.get("messages")
+        if not isinstance(messages, list) or not 1 <= len(messages) <= 12:
+            return Response(
+                {"detail": "Send between 1 and 12 chat messages."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        validated_messages = []
+        total_characters = 0
+        for message in messages:
+            if not isinstance(message, dict) or message.get("role") not in {"user", "assistant"}:
+                return Response(
+                    {"detail": "Each message must have a user or assistant role."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            content = message.get("content")
+            if not isinstance(content, str) or not content.strip() or len(content) > 2000:
+                return Response(
+                    {"detail": "Each message must contain 1 to 2000 characters."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            total_characters += len(content)
+            if total_characters > 8000:
+                return Response(
+                    {"detail": "The conversation is too long. Start a new chat."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            validated_messages.append(
+                {"role": message["role"], "content": content.strip()}
+            )
+
+        if validated_messages[-1]["role"] != "user":
+            return Response(
+                {"detail": "The last chat message must be from the user."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            return Response({"reply": chat_with_ai(validated_messages)})
+        except AIServiceError as error:
+            return Response({"detail": error.detail}, status=error.status_code)
 
 
 class SettingsView(APIView):

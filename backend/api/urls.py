@@ -5,6 +5,7 @@ from .views import (
     AIView,
     ApplicationView,
     AuthView,
+    ChatView,
     CompanyViewSet,
     JobViewSet,
     ResumeUploadView,
@@ -38,6 +39,7 @@ urlpatterns = [
     path("ai/job-matches/", AIView.as_view(), {"action": "job-matches"}, name="ai-job-matches"),
     path("ai/job-match/<int:job_id>", AIView.as_view(), {"action": "job-match"}, name="ai-job-match"),
     path("ai/resume/analyze", AIView.as_view(), {"action": "resume/analyze"}, name="ai-resume-analysis"),
+    path("ai/chat", ChatView.as_view(), name="ai-chat"),
     path("settings/", SettingsView.as_view(), name="settings"),
     path("settings/<str:action>", SettingsView.as_view(), name="settings-action"),
 ] + router.urls

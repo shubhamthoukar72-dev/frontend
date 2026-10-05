@@ -289,6 +289,39 @@ class BackendApiTests(APITestCase):
         )
         generate_json.assert_called_once()
 
+    @patch("api.ai._generate_json")
+    def test_public_chat_endpoint_returns_a_gemini_reply(self, generate_json):
+        generate_json.return_value = {
+            "reply": "Start by tailoring your resume to the job description."
+        }
+
+        response = self.client.post(
+            "/ai/chat",
+            {
+                "messages": [
+                    {"role": "user", "content": "How can I improve my resume?"}
+                ]
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data["reply"],
+            "Start by tailoring your resume to the job description.",
+        )
+        generate_json.assert_called_once()
+
+    def test_chat_endpoint_rejects_invalid_conversations(self):
+        response = self.client.post(
+            "/ai/chat",
+            {"messages": [{"role": "assistant", "content": "Hello"}]},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("last chat message", response.data["detail"])
+
     @override_settings(GEMINI_API_KEY="")
     def test_ai_endpoints_require_a_resume_before_analysis(self):
         self.authenticate_as(self.user)

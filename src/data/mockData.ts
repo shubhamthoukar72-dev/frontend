@@ -1,0 +1,67 @@
+export interface MockJob {
+  title: string;
+  location: string;
+  salary: string;
+  requiredSkills: string[];
+}
+
+export interface MockCompany {
+  name: string;
+  industry: string;
+  size: string;
+  location: string;
+}
+
+export const mockJobs: MockJob[] = [
+  {
+    title: "Frontend Developer",
+    location: "Bengaluru, India",
+    salary: "₹12,00,000 - ₹18,00,000 per year",
+    requiredSkills: ["React", "TypeScript", "JavaScript", "CSS"],
+  },
+  {
+    title: "Backend Engineer",
+    location: "Hyderabad, India",
+    salary: "₹15,00,000 - ₹22,00,000 per year",
+    requiredSkills: ["Node.js", "PostgreSQL", "REST APIs", "Docker"],
+  },
+  {
+    title: "Data Scientist",
+    location: "Pune, India",
+    salary: "₹14,00,000 - ₹20,00,000 per year",
+    requiredSkills: ["Python", "SQL", "Machine Learning", "Pandas"],
+  },
+  {
+    title: "Cloud Engineer",
+    location: "Remote, India",
+    salary: "₹16,00,000 - ₹24,00,000 per year",
+    requiredSkills: ["AWS", "Terraform", "Kubernetes", "Linux"],
+  },
+  {
+    title: "Product Designer",
+    location: "Chennai, India",
+    salary: "₹10,00,000 - ₹16,00,000 per year",
+    requiredSkills: ["Figma", "User Research", "Prototyping", "Accessibility"],
+  },
+];
+
+export const mockCompanies: MockCompany[] = [
+  {
+    name: "Northstar Labs",
+    industry: "Software Development",
+    size: "51-200 employees",
+    location: "Bengaluru, India",
+  },
+  {
+    name: "CloudHarbor Systems",
+    industry: "Cloud Computing",
+    size: "201-500 employees",
+    location: "Hyderabad, India",
+  },
+  {
+    name: "Brightpath AI",
+    industry: "Artificial Intelligence",
+    size: "51-200 employees",
+    location: "Pune, India",
+  },
+];

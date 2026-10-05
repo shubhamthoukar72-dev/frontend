@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Northstar Labs",
+    "industry": "Software Development",
+    "size": "51-200 employees",
+    "location": "Bengaluru, India"
+  },
+  {
+    "name": "CloudHarbor Systems",
+    "industry": "Cloud Computing",
+    "size": "201-500 employees",
+    "location": "Hyderabad, India"
+  },
+  {
+    "name": "Brightpath AI",
+    "industry": "Artificial Intelligence",
+    "size": "51-200 employees",
+    "location": "Pune, India"
+  }
+]

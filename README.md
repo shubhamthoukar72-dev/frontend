@@ -12,8 +12,22 @@ npm run dev
 
 Set `VITE_API_URL` in `.env` to the backend origin (for example,
 `http://127.0.0.1:8000`). Restart Vite after changing the value. The backend
-provides Gemini-powered resume analysis, job matching, and job recommendations;
-configure `GEMINI_API_KEY` in `backend/.env` to enable those features.
+provides Gemini-powered resume analysis, job matching, job recommendations, and
+the site-wide career assistant; configure `GEMINI_API_KEY` in `backend/.env` to
+enable those features. Keep this key on the backend; never add it to a `VITE_`
+frontend environment variable.
+
+The Resume AI and AI Job Match pages require a signed-in user with a resume
+uploaded to their profile. The floating JobAI Assistant is available throughout
+the site and accepts up to 30 messages per hour per user or IP address.
+
+## Sample job and company data
+
+The sample datasets are available as public JSON at `public/data/jobs.json` and
+`public/data/companies.json`, as typed arrays in `src/data/mockData.ts`, and as
+a standalone SQLite-compatible schema and seed script in
+`backend/sample_jobs_companies.sql`. The SQL script creates separate `jobs`
+and `companies` tables and inserts five rows into each.
 
 ## Vite template notes
 

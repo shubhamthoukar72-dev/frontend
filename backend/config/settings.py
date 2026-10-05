@@ -106,6 +106,9 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
     ],
+    "DEFAULT_THROTTLE_RATES": {
+        "ai_chat": "30/hour",
+    },
 }
 
 SIMPLE_JWT = {
